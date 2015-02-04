@@ -1,0 +1,24 @@
+parameters:
+    team3_pay_u.configuration.class: Team3\PayU\Configuration\Configuration
+    team3_pay_u.configuration.credentials.class: Team3\PayU\Configuration\Credentials\Credentials
+
+services:
+    team3_pay_u.configuration.credentials.signature_algorithm:
+        class: "%team3_pay_u.signature_algorithm_class%"
+
+    team3_pay_u.configuration.credentials:
+        class: %team3_pay_u.configuration.credentials.class%
+        arguments:
+            - %team3_pay_u.merchant_id%
+            - %team3_pay_u.private_key%
+            - @team3_pay_u.configuration.credentials.signature_algorithm
+            - %team3_pay_u.encryption_protocol%
+
+    team3_pay_u.configuration:
+        class: %team3_pay_u.configuration.class%
+        arguments:
+            - @team3_pay_u.configuration.credentials
+            - %team3_pay_u.protocol%
+            - %team3_pay_u.domain%
+            - %team3_pay_u.path%
+            - %team3_pay_u.version%
