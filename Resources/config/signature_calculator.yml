@@ -1,0 +1,81 @@
+parameters:
+    team3_pay_u.encoder.class: Team3\PayU\SignatureCalculator\Encoder\Encoder
+    team3_pay_u.encoder_strategy.md5.class: Team3\PayU\SignatureCalculator\Encoder\Strategy\Md5Strategy
+    team3_pay_u.encoder_strategy.sha1.class: Team3\PayU\SignatureCalculator\Encoder\Strategy\Sha1Strategy
+    team3_pay_u.encoder_strategy.sha256.class: Team3\PayU\SignatureCalculator\Encoder\Strategy\Sha256Strategy
+    team3_pay_U.encoder_algorithm.md5.class: Team3\PayU\SignatureCalculator\Encoder\Algorithms\Md5Algorithm
+    team3_pay_U.encoder_algorithm.sha1.class: Team3\PayU\SignatureCalculator\Encoder\Algorithms\Sha1Algorithm
+    team3_pay_U.encoder_algorithm.sha256.class: Team3\PayU\SignatureCalculator\Encoder\Algorithms\Sha256Algorithm
+    team3_pay_u.algorithms_provider.class: Team3\Bundle\PayUBundle\Service\AlgorithmsProvider\AlgorithmsProvider
+    team3_pay_u.parameters_sorter.class: Team3\PayU\SignatureCalculator\ParametersSorter\ParametersSorter
+    team3_pay_u.signature_calculator.class: Team3\PayU\SignatureCalculator\SignatureCalculator
+    team3_pay_u.order_signature_calculator.class: Team3\PayU\SignatureCalculator\OrderSignatureCalculator
+    team3_pay_u.algorithm_extractor.class: Team3\PayU\SignatureCalculator\Validator\AlgorithmExtractor
+    team3_pay_u.signature_validator.class: Team3\PayU\SignatureCalculator\Validator\SignatureValidator
+
+services:
+    team3_pay_u.encoder:
+        class: %team3_pay_u.encoder.class%
+        arguments:
+            - @team3_pay_u.logger_adapter
+
+    team3_pay_u.encoder_strategy.md5:
+        class: %team3_pay_u.encoder_strategy.md5.class%
+        tags:
+            - { name: team3_pay_u.encoder_strategy }
+
+    team3_pay_u.encoder_strategy.sha1:
+        class: %team3_pay_u.encoder_strategy.sha1.class%
+        tags:
+            - { name: team3_pay_u.encoder_strategy }
+
+    team3_pay_u.encoder_strategy.sha256:
+        class: %team3_pay_u.encoder_strategy.sha256.class%
+        tags:
+            - { name: team3_pay_u.encoder_strategy }
+
+    team3_pay_u.parameters_sorter:
+        class: %team3_pay_u.parameters_sorter.class%
+        arguments:
+            - @team3_pay_u.serializer
+
+    team3_pay_u.signature_calculator:
+        class: %team3_pay_u.signature_calculator.class%
+        arguments:
+            - @team3_pay_u.encoder
+
+    team3_pay_u.algorithms_provider:
+        class: %team3_pay_u.algorithms_provider.class%
+
+    team3_pay_u.encoder_algorithm.md5:
+        class: %team3_pay_u.encoder_algorithm.md5.class%
+        tags:
+            - {name: team3_pay_u.encoding_algorithm}
+
+    team3_pay_u.encoder_algorithm.sha1:
+        class: %team3_pay_u.encoder_algorithm.sha1.class%
+        tags:
+            - {name: team3_pay_u.encoding_algorithm}
+
+    team3_pay_u.encoder_algorithm.sha256:
+        class: %team3_pay_u.encoder_algorithm.sha256.class%
+        tags:
+            - {name: team3_pay_u.encoding_algorithm}
+
+    team3_pay_u.algorithm_extractor:
+        class: %team3_pay_u.algorithm_extractor.class%
+
+    team3_pay_u.signature_validator:
+        class: %team3_pay_u.signature_validator.class%
+        arguments:
+            - @team3_pay_u.signature_calculator
+            - @team3_pay_u.algorithm_extractor
+            - @team3_pay_u.algorithms_provider
+
+    team3_pay_u.order_signature_calculator:
+        class: %team3_pay_u.order_signature_calculator.class%
+        arguments:
+            - @team3_pay_u.encoder
+            - @team3_pay_u.parameters_sorter
+            - @team3_pay_u.logger_adapter
+

@@ -1,0 +1,20 @@
+parameters:
+    team3_pay_u.property_extractor.doctrine_annotation_reader.class: Doctrine\Common\Annotations\AnnotationReader
+    team3_pay_u.property_extractor.annotation_reader.class: Team3\PayU\PropertyExtractor\Reader\AnnotationReader
+    team3_pay_u.property_extractor.extractor.class: Team3\PayU\PropertyExtractor\Extractor
+
+services:
+    team3_pay_u.property_extractor.doctrine_annotation_reader:
+        class: %team3_pay_u.property_extractor.doctrine_annotation_reader.class%
+
+    team3_pay_u.property_extractor.annotation_reader:
+        class: %team3_pay_u.property_extractor.annotation_reader.class%
+        arguments:
+            - @team3_pay_u.property_extractor.doctrine_annotation_reader
+            - @team3_pay_u.logger_adapter
+
+    team3_pay_u.property_extractor.extractor:
+        class: %team3_pay_u.property_extractor.extractor.class%
+        arguments:
+            - @team3_pay_u.property_extractor.annotation_reader
+            - @team3_pay_u.logger_adapter

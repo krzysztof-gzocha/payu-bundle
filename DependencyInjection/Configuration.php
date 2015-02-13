@@ -23,10 +23,16 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+            ->scalarNode('logger_service')
+                ->cannotBeEmpty()
+                ->defaultValue('monolog.logger')
+                ->end()
             ->scalarNode('signature_algorithm_class')
+                ->cannotBeEmpty()
                 ->defaultValue('Team3\PayU\SignatureCalculator\Encoder\Algorithms\Md5Algorithm')
                 ->end()
             ->booleanNode('sandbox')
+                ->cannotBeEmpty()
                 ->defaultFalse()
                 ->end()
             ->scalarNode('merchant_id')

@@ -1,0 +1,24 @@
+parameters:
+    team3_pay_u.group_specifier.class: Team3\PayU\Serializer\GroupsSpecifier
+    team3_pay_u.serializer.class: Team3\PayU\Serializer\Serializer
+    team3_pay_u.jms_serializer_builder.class: JMS\Serializer\SerializerBuilder
+    team3_pay_u.jms_serializer.class: JMS\Serializer\Serializer
+
+services:
+    team3_pay_u.group_specifier:
+        class: %team3_pay_u.group_specifier.class%
+        arguments:
+            - @team3_pay_u.logger_adapter
+
+    team3_pay_u.jms_serializer:
+        class: %team3_pay_u.jms_serializer.class%
+        factory_class: %team3_pay_u.jms_serializer_builder.class%
+        factory_method: build
+
+    team3_pay_u.serializer:
+        class: %team3_pay_u.serializer.class%
+        lazy: true
+        arguments:
+            - @team3_pay_u.jms_serializer
+            - @team3_pay_u.group_specifier
+            - @team3_pay_u.logger_adapter

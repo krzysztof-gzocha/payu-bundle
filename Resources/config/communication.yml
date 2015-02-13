@@ -1,0 +1,71 @@
+parameters:
+    team3_pay_u.communication.curl.class: Buzz\Client\Curl
+    team3_pay_u.communication.sender.class: Team3\PayU\Communication\Sender\Sender
+    team3_pay_u.communication.curl_request_builder.class: Team3\PayU\Communication\CurlRequestBuilder\CurlRequestBuilder
+    team3_pay_u.communication.client_adapter.class: Team3\PayU\Communication\ClientAdapter
+    team3_pay_u.communication.http_status_parser.class: Team3\PayU\Communication\HttpStatusParser\HttpStatusParser
+    team3_pay_u.communication.response_deserializer.class: Team3\PayU\Communication\Process\ResponseDeserializer\ResponseDeserializer
+    team3_pay_u.communication.request_process.class: Team3\PayU\Communication\Process\RequestProcess
+    team3_pay_u.communication.order_cancel_response.class: Team3\PayU\Communication\Response\OrderCancelResponse
+    team3_pay_u.communication.order_create_response.class: Team3\PayU\Communication\Response\OrderCreateResponse
+    team3_pay_u.communication.order_retrieve_response.class: Team3\PayU\Communication\Response\OrderRetrieveResponse
+    team3_pay_u.communication.notification_process.class: Team3\PayU\Communication\Process\NotificationProcess\NotificationProcess
+
+services:
+    team3_pay_u.communication.curl:
+        class: %team3_pay_u.communication.curl.class%
+
+    team3_pay_u.communication.sender:
+        class: %team3_pay_u.communication.sender.class%
+        arguments:
+            - @team3_pay_u.communication.curl
+            - @team3_pay_u.logger_adapter
+
+    team3_pay_u.communication.curl_request_builder:
+        class: %team3_pay_u.communication.curl_request_builder.class%
+        arguments:
+            - @team3_pay_u.serializer
+
+    team3_pay_u.communication.client_adapter:
+        class: %team3_pay_u.communication.client_adapter.class%
+        arguments:
+            - @team3_pay_u.communication.sender
+            - @team3_pay_u.communication.curl_request_builder
+            - @team3_pay_u.logger_adapter
+
+    team3_pay_u.communication.http_status_parser:
+        class: %team3_pay_u.communication.http_status_parser.class%
+
+    team3_pay_u.communication.response_deserializer:
+        class: %team3_pay_u.communication.response_deserializer.class%
+        arguments:
+            - @team3_pay_u.serializer
+
+    team3_pay_u.communication.request_process:
+        class: %team3_pay_u.communication.request_process.class%
+        arguments:
+            - @team3_pay_u.communication.response_deserializer
+            - @team3_pay_u.communication.client_adapter
+            - @validator
+            - @team3_pay_u.communication.http_status_parser
+
+    team3_pay_u.communication.order_retrieve_response:
+        class: %team3_pay_u.communication.order_retrieve_response.class%
+        tags:
+            - { name: team3_pay_u.communication.response }
+
+    team3_pay_u.communication.order_create_response:
+        class: %team3_pay_u.communication.order_create_response.class%
+        tags:
+            - { name: team3_pay_u.communication.response }
+
+    team3_pay_u.communication.order_cancel_response:
+        class: %team3_pay_u.communication.order_cancel_response.class%
+        tags:
+            - { name: team3_pay_u.communication.response }
+
+    team3_pay_u.communication.notification_process:
+        class: %team3_pay_u.communication.notification_process.class%
+        arguments:
+            - @team3_pay_u.serializer
+            - @team3_pay_u.signature_validator

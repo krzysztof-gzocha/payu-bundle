@@ -4,6 +4,7 @@ namespace Team3\Bundle\PayUBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -26,6 +27,9 @@ class Team3PayUExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('configuration.yml');
+        $loader->load('signature_calculator.yml');
+        $loader->load('serializer.yml');
+        $loader->load('property_extractor.yml');
     }
 
     /**
