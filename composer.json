@@ -1,0 +1,20 @@
+{
+    "name": "krzysztof-gzocha/payu-bundle",
+    "description": "Integrating krzysztof-gzocha/payu library with Symfony2",
+    "homepage": "https://github.com/krzysztof-gzocha/payu-bundle",
+    "require": {
+        "krzysztof-gzocha/payu": "v1.0.1"
+    },
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "keywords": ["payu", "integrating", "symfony", "symfony2"],
+    "autoload": {
+      "psr-4": { "Team3\\Bundle\\PayUBundle\\": "" }
+    },
+    "authors": [
+        {
+            "name": "Krzysztof Gzocha",
+            "email": "krzysztof.gzocha@xsolve.pl"
+        }
+    ]
+}
